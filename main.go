@@ -15,6 +15,7 @@ var (
 )
 
 func main() {
+	flag.Parse()
 	r := gin.Default()
 	r.POST(*path, func(c *gin.Context) {
 		rb, err := io.ReadAll(c.Request.Body)
