@@ -1,28 +1,34 @@
 package main
 
 import (
-	"encoding/json"
+	"flag"
+	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	port = flag.Int("port", 80, "port to listen on")
+	path = flag.String("path", "/", "path to listen on")
+)
+
 func main() {
 	r := gin.Default()
-	r.POST("/dingtalk/webhook1/send", func(c *gin.Context) {
-		var data interface{}
-		err := json.NewDecoder(c.Request.Body).Decode(&data)
+	r.POST(*path, func(c *gin.Context) {
+		rb, err := io.ReadAll(c.Request.Body)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": err,
 			})
 			return
 		}
-		rb, _ := json.Marshal(data)
 		println(string(rb))
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
+		c.Status(200)
 	})
-	r.Run(":8060") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	err := r.Run(fmt.Sprintf(":%d", *port)) // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	if err != nil {
+		fmt.Println(err)
+	}
 }
