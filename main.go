@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sanity-io/litter"
 )
 
 var (
@@ -18,6 +19,7 @@ func main() {
 	flag.Parse()
 	r := gin.Default()
 	r.POST(*path, func(c *gin.Context) {
+		litter.Dump(c.Request.Header)
 		rb, err := io.ReadAll(c.Request.Body)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{

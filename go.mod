@@ -2,7 +2,10 @@ module github.com/mss-boot-io/test-pile
 
 go 1.21
 
-require github.com/gin-gonic/gin v1.9.1
+require (
+	github.com/gin-gonic/gin v1.9.1
+	github.com/sanity-io/litter v1.5.5
+)
 
 require (
 	github.com/bytedance/sonic v1.10.2 // indirect
